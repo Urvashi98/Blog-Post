@@ -1,0 +1,53 @@
+.sitePageHeader {
+    border: 1px solid rgb(169, 165, 174);
+    margin-top: 1em;
+} 
+
+.posts_container {
+    display: flex;
+    flex-direction: column;
+}
+.posts_container > div {
+    margin-bottom: 1.5em;
+}
+
+.articleContainer  {
+    margin-bottom: 1.5em;
+}
+
+.postInfo_Header {
+    border: 1px solid rgb(169, 165, 174);
+    margin-top: 1em;
+}
+.postInfo_Content {
+    margin-top: 1.5em;
+}
+.postInfo_Card {
+    margin: 0px auto;  
+    text-align: justify;
+}
+.post_AllInputsContainer {
+    border: 1px solid rgb(169, 165, 174);
+    width: 100%;
+    min-height: 3em;
+    padding: 3em;
+}
+.post_InputContainer > div {
+    margin: 0.8em;
+}
+.post_SubmitButton {
+    float: right;
+}
+.articleContainer_snippet {
+ font-weight: 400;
+ font-size: 16px;
+}
+.notSignedInBoxShadow {
+    background: linear-gradient(rgba(255, 255, 255, 0), rgb(232, 248, 249));
+    height: 150px;
+    margin-top: -100px;
+    padding: 0 !important;
+    margin-left: -25px;
+    margin-right: -25px;
+    position: relative;
+}
