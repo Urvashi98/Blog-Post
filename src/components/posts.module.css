@@ -51,3 +51,20 @@
     margin-right: -25px;
     position: relative;
 }
+.navBarMain {
+    margin: 1rem 0 1rem 0;
+    display: flex;
+    justify-content: flex-end;
+}
+.singlePostLinks {
+    display: flex;
+    gap: 1rem;
+}
+.singlePostLink {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+}
+.singlePostLink:hover {
+    color: rgb(10, 14, 82);
+}

@@ -1,54 +1,70 @@
 import { Button, Input, PageHeader } from "antd";
 import TextArea from "antd/lib/input/TextArea";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "./posts.module.css";
 import { db } from "../firebase-config";
-import { collection, addDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { updateDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { useNavigate, useParams } from "react-router-dom";
 
 const initialState = {
   title: "",
   content: "",
 };
 
-const CreatePost = () => {
+const UpdatePost = () => {
+  const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState(initialState);
   let navigate = useNavigate(); // use to navigate to page
 
-  // const helloHandeler = () => {
-  //   setLoading(true);
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 2000);
-  // };
+  const getSinglePost = async (id) => {
+    const getSinglePostRef = doc(db, "posts", id);
+    const singlePost = await getDoc(getSinglePostRef);
+    if (singlePost.exists()) {
+      let postData = singlePost.data();
+      setValue({ ...postData }); // set the data to state, hence it will populate the value in feilds
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
+  useEffect(() => {
+    getSinglePost(id);
+  }, [id]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValue((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onCreatePost = async (e) => {
+  const onUpdatePost = async (e) => {
     e.preventDefault();
     const payload = {
       title: value.title,
       content: value.content,
     };
-    console.log('payload', payload);
+    console.log("payload", payload);
     try {
-      const docRef = await addDoc(collection(db, "posts"), payload);
-      console.log("Document written with ID: ", docRef.id);
+      //   const docRef = await addDoc(collection(db, "posts"), payload);
+      const docRef = await doc(db, "posts", id);
+
+      console.log("Document written with ID: ", docRef);
+      await updateDoc(docRef, payload);
       setValue(initialState);
-      navigate('/posts', {replace: 'true'})
-    }catch(e) {
-      console.log('error',e);
+      navigate("/posts", { replace: "true" });
+    } catch (e) {
+      console.log("error", e);
     }
- 
   };
   return (
-    <form className={classes.posts_container} onSubmit={(e) => onCreatePost(e)} method="post">
+    <form
+      className={classes.posts_container}
+      onSubmit={(e) => onUpdatePost(e)}
+      method="post"
+    >
       <div className="pageHeaderContainer">
-        <PageHeader className={classes.sitePageHeader} title="Create Post" />
+        <PageHeader className={classes.sitePageHeader} title="Update Post" />
       </div>
       <div className={classes.post_AllInputsContainer}>
         <div className={classes.post_InputContainer}>
@@ -83,7 +99,7 @@ const CreatePost = () => {
               loading={false}
               htmlType="submit"
             >
-              Create Post
+              Update Post
             </Button>
           </div>
         </div>
@@ -92,4 +108,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default UpdatePost;

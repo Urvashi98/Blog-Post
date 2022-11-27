@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { db } from "../firebase-config";
 import { doc, getDoc } from "firebase/firestore";
 
-
 const PostDetailedInfo = () => {
   const { id } = useParams(); // id is a string here
   const [post, setPost] = useState([]);
@@ -16,23 +15,20 @@ const PostDetailedInfo = () => {
     const getSinglePostRef = doc(db, "posts", id);
     const singlePost = await getDoc(getSinglePostRef);
     if (singlePost.exists()) {
-      console.log("Document data:", singlePost.data());
+      let postData = singlePost.data();
+      setPost((prev) => [{...postData}]);
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
     }
-    console.log('single post', singlePost.data());
-  }
+  };
   useEffect(() => {
-    // (() => {
-    //   let postData = api.filter((post) => post.id === parseInt(id));
-    //   setPost(postData);
-    // })();
     getSinglePost(id);
   }, [id]);
 
   //map the post array(it contains one object only though)
   const handleContent = (postContent) => {
+    console.log('post in handle content',post);
     return post.map((p) => {
       //again map the content of the current object for Paragraphs
       return postContent.split("\n").map((item, i) => {
@@ -42,14 +38,13 @@ const PostDetailedInfo = () => {
   };
   return (
     <>
-    {/* <div className="postInfoContainer">
-      {post.map((p) => {
+        {post.map((p) => {
         return (
-          <div key={p.id}>
+          <div key={id}>
             <div className={classes.postInfo_Header}>
               <PageHeader className="classes.sitePageHeader" title={p.title} />
             </div>
-            <div className={classes.postInfo_Content}>
+            <div className={classes.postInfo_Content} key={id}>
               <Card className={classes.postInfo_Card}>
                 <div>{handleContent(p.content)} </div>
               </Card>
@@ -57,7 +52,6 @@ const PostDetailedInfo = () => {
           </div>
         );
       })}
-    </div> */}
     </>
   );
 };

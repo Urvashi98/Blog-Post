@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PageHeader } from "antd";
 import classes from "./posts.module.css";
 import PostSnippet from "./PostSnippet";
-import { map } from "lodash";
+import { capitalize, map } from "lodash";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 
@@ -17,16 +17,12 @@ const Posts = () => {
       // setPosts((posts) => [...posts, post])
       return { id, ...doc.data() };
     });
-    setPosts(getPostsDocs)
+    setPosts(getPostsDocs);
   };
 
-
-useEffect(() => {
-  
-getAllPosts();
-
-}, [])
-
+  useEffect(() => {
+    getAllPosts();
+  }, []);
 
   return (
     <div className={classes.posts_container}>
@@ -38,8 +34,8 @@ getAllPosts();
           console.log(index);
           return (
             <PostSnippet
-              title={article.title}
-              content={article.content.substring(0,200)}
+              title={capitalize(article.title)}
+              content={article.content.substring(0, 200)}
               key={index}
               id={article.id}
             />
